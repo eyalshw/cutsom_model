@@ -1,5 +1,8 @@
 from transformers import AutoTokenizer, AutoModelForMaskedLM, AutoModelForSequenceClassification, \
     TextClassificationPipeline, AutoConfig
+
+from transformers import pipeline
+
 from transformers import pipeline
 
 from custom_model import CustomModel
@@ -29,17 +32,38 @@ class MyPipeline(TextClassificationPipeline):
     def postprocess(self, model_outputs, function_to_apply=None, top_k=1, _legacy=True, maybe_arg=5):
         return super().postprocess(model_outputs, function_to_apply, top_k, _legacy)
 
+def CustomTextClassificationPipeline(TextClassificationPipeline):
+    pass
 
 
 
-# Press the green button in the gutter to run the script.
 def main():
-    bert_classifier = BertClassifier(AutoConfig.from_pretrained('Rostlab/prot_bert_bfd'))
+    bert_classifier = BertClassifier(AutoConfig.from_pretrained('bert-base-uncased'))
     bert_classifier.save_pretrained('./bert_classifier')
-    print(bert_classifier)
+    # print(bert_classifier)
 
     loaded_bert_classifier = BertClassifier.from_pretrained('./bert_classifier')
-    print(loaded_bert_classifier)
+    # print(loaded_bert_classifier)
+
+
+    PIPELINE_REGISTRY.register_pipeline(
+        "custom-text-classification",
+        pipeline_class=TextClassificationPipeline,
+        pt_model=BertClassifier,
+    )
+
+    orig_pipeline =  pipeline(task='text-classification', model='bert-base-uncased', tokenizer='bert-base-uncased')
+    print(orig_pipeline("text"))
+
+    custom_pipeline =  pipeline(task='custom-text-classification', model=loaded_bert_classifier, tokenizer='bert-base-uncased')
+    print(custom_pipeline("text"))
+
+
+
+    return
+
+    custom_pipeline = pipeline(task='custom-text-classification', model=loaded_bert_classifier, tokenizer='bert-base-uncased')
+    res = custom_pipeline('text')
     return
 
     # tokenizer = AutoTokenizer.from_pretrained("asafaya/bert-base-arabic")
