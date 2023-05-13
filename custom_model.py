@@ -3,9 +3,9 @@ from torch import nn
 from transformers import BertModel
 
 
-class BertClassifier(nn.Module):
+class CustomModel(nn.Module):
     def __init__(self, num_labels):
-        super(BertClassifier, self).__init__()
+        super(CustomModel, self).__init__()
         self.bert = BertModel.from_pretrained('bert-base-uncased')
         self.dropout = nn.Dropout(0.1)
         self.classifier = nn.Linear(self.bert.config.hidden_size, num_labels)

@@ -2,7 +2,7 @@ from transformers import AutoTokenizer, AutoModelForMaskedLM, AutoModelForSequen
     TextClassificationPipeline
 from transformers import pipeline
 
-from custom_model import BertClassifier
+from custom_model import CustomModel
 from transformers.pipelines import PIPELINE_REGISTRY
 
 
@@ -34,7 +34,7 @@ class MyPipeline(TextClassificationPipeline):
 def main():
     tokenizer = AutoTokenizer.from_pretrained("asafaya/bert-base-arabic")
     custom_model = MyModel.from_pretrained("asafaya/bert-base-arabic")
-    custom_model = BertClassifier(2)
+    custom_model = CustomModel(2)
 
     PIPELINE_REGISTRY.register_pipeline(
         "new-task",
