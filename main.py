@@ -52,7 +52,7 @@ def main():
         pt_model=BertClassifier,
     )
 
-    orig_pipeline =  pipeline(task='text-classification', model='bert-base-uncased', tokenizer='bert-base-uncased')
+    orig_pipeline = pipeline(task='text-classification', model='bert-base-uncased', tokenizer='bert-base-uncased')
     print(orig_pipeline("text"))
 
     custom_pipeline =  pipeline(task='custom-text-classification', model=loaded_bert_classifier, tokenizer='bert-base-uncased')
